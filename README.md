@@ -27,9 +27,9 @@ typedef ULONG_PTR(*WriteFileHandle)(HANDLE file_handle, char* buffer, size_t siz
 
    ```c
    typedef ULONG_PTR(*WriteFileHandle)(HANDLE file_handle, char* buffer, size_t sizeOfBuffer, size_t count, const char* format, ...);
-   WriteFileHandle write_sys_file_log = (WriteFileHandle)(&write_file_shell[0x180]);
+   WriteFileHandle write_file_shell = (WriteFileHandle)(&write_file_shell[0x180]);
    char test[20];
-   write_sys_file_log(((PPEB)NtCurrentPeb())->ProcessParameters->StandardOutput, & test[0], 20, 20, "Hello %s !", "world");
+   write_file_shell(((PPEB)NtCurrentPeb())->ProcessParameters->StandardOutput, & test[0], 20, 20, "Hello %s !", "world");
    ```
 
    
