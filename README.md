@@ -23,7 +23,9 @@ typedef ULONG_PTR(*WriteFileHandle)(HANDLE file_handle, char* buffer, size_t siz
 
 3. Entry point : base address + 0x180
 
-4. Example : 
+4. Returns : always 0x0
+
+5. Example : 
 
    ```c
    typedef ULONG_PTR(*WriteFileHandle)(HANDLE file_handle, char* buffer, size_t sizeOfBuffer, size_t count, const char* format, ...);
@@ -34,3 +36,34 @@ typedef ULONG_PTR(*WriteFileHandle)(HANDLE file_handle, char* buffer, size_t siz
 
    
 
+## 2. Create File
+
+This shellcode is designed to create a ".txt" file with the following format "pîd_tid.txt". This file could be used to log some information about context of execution
+
+1. Signature of shellcode :
+
+```c
+typedef ULONG_PTR (*CreateFileHandle)(void);
+```
+
+
+
+2. Procedures called : 
+
+   * wcsncpy
+   * swprintf
+   * NtCreateFile
+
+3. Entry point : base address + 0x180
+
+4. Returns : file handle to newly created file
+
+5. Example :
+
+   ```c
+   typedef ULONG_PTR (*CreateFileHandle)(void);
+   CreateFileHandle create_file_shell = (CreateFileHandle)(&create_file_shell[0x180]);
+   HANDLE file_handle = create_file_shell();
+   ```
+
+   
