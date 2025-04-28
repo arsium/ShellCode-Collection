@@ -1,0 +1,36 @@
+# My personal repository for shellcode creation
+
+This repository contains my personal created shellcodes for many tasks in reverse engineering or evasion/obfuscation. All shellcodes are designed to work in x64 (PE32+) executable. Also, some of them require RWX memory region. This repository will be updated at any time, when I find a shellcode useful in my journey. Source code won't be published, so feel free to reverse them :)
+
+
+
+## 1. Write File
+
+This shellcode is designed to write some text in a file or even console from a file handle and is compatible with multi-thread app.
+
+1. Signature of shellcode : 
+
+```c
+typedef ULONG_PTR(*WriteFileHandle)(HANDLE file_handle, char* buffer, size_t sizeOfBuffer, size_t count, const char* format, ...);
+```
+
+2. Procedures called : 
+
+* _vsnprintf_s
+* NtLockFile
+* NtWriteFile
+* NtUnlockFile
+
+3. Entry point : base address + 0x180
+
+4. Example : 
+
+   ```c
+   typedef ULONG_PTR(*WriteFileHandle)(HANDLE file_handle, char* buffer, size_t sizeOfBuffer, size_t count, const char* format, ...);
+   WriteFileHandle write_sys_file_log = (WriteFileHandle)(&write_file_shell[0x180]);
+   char test[20];
+   write_sys_file_log(((PPEB)NtCurrentPeb())->ProcessParameters->StandardOutput, & test[0], 20, 20, "Hello %s !", "world");
+   ```
+
+   
+
